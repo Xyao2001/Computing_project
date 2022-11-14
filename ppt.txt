@@ -1,0 +1,7 @@
+Introduction​
+
+Qubits are the basis of quantum computing technology. A qubit is a binary unit of quantum information and  can be represented by an atom's ground |0⟩ and |1⟩ excited states. The dynamics of the atom's wavefunction is described by the time-dependent Schr ̈odinger equation.​
+
+
+
+ The collapse of the wave function |Ψ⟩  to the ground state |0⟩  is known as a quantum jump and the evolution of wavefunction over time| (t)i as a quantum trajectory. 
