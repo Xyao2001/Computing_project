@@ -81,11 +81,12 @@ class MC:
                 #print('time evo operator is being applied')
                 # je_star is the hermitian of time_evo, i know these names are awful
                 jump_operator = math.sqrt(gamma/2)*np.array([[0, 1], [0, 0]])
-                psi_0= jump_operator*evolved_
-                #print(f" ::::psi is {evolved_}:the jump operator acting on psi is:::::: {psi_1}")
+                psi_jump= jump_operator*(evolved_)
+                norm_jump=np.linalg.norm(np.real(psi_jump))
+                psi=psi_jump/norm_jump
+                print(f" ::::psi is {evolved_}:the jump operator acting on psi is:::::: {psi_jump}")
                 # the wave vector is giving nan values
 
-                psi = (psi_0/np.sqrt(norm_squared))
                 sum_wave_vector.append(psi)
 
         sum_wave_vector = (sum_wave_vector)
@@ -118,13 +119,9 @@ class MC:
         #
 
 
-time = 100
+time = 20
 times = np.arange(time)
 
 Monte = MC(0, 1, 2)
 y = (Monte.evolve(2, time))
 
-plt.figure()
-plt.plot(times, y)
-
-plt.show()
