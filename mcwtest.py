@@ -4,9 +4,6 @@ import pandas as pd
 import random
 import matplotlib.pyplot as plt
 import math
-
-
-
 class MC:
     global pho_matrix
     global r
@@ -54,7 +51,8 @@ class MC:
             #coefficient=np.sum(1-np.sum((1j*(H_eff*sum_time))))
             coefficient=m_1-(0.5j)*H_eff
             psi=np.matmul(coefficient,psi)
-            norm=np.linalg.norm((psi))
+            #norm=np.linalg.norm((psi))
+            norm=np.sqrt((np.sum(abs(psi)**2)))
             
             #norm_squared=(np.abs(np.matmul(np.conj(np.transpose(evolved_)),evolved_)))[1,1]
             norm_squared=norm*norm
@@ -65,7 +63,7 @@ class MC:
                 # then there is no decay and we simply renormalise
                 psi=psi/np.sqrt(norm_squared)
                 #print(f"no jump and wave vector is {psi}")
-                sum_wave_vector.append(abs(psi[1]**2))
+                sum_wave_vector.append(np.abs(psi[1]**2))
 
         #if r is greater than or equal to norm _squared then there's a decay
             elif r>=norm_squared:
@@ -78,11 +76,11 @@ class MC:
                 psi_1=np.matmul(jump_operator,psi)
                 #print(f" ::::psi is {evolved_}:the jump operator acting on psi is:::::: {psi_1}")
                 #the wave vector is giving nan values
-
-                norm_square=np.linalg.norm((psi_1))*np.linalg.norm((psi_1))
+                norm_1=np.sqrt((np.sum(abs(psi_1)**2)))
+                norm_square=norm_1*norm_1
 
                 psi=psi_1/np.sqrt(norm_square)
-                sum_wave_vector.append(abs(psi[1]**2))
+                sum_wave_vector.append(np.abs(psi[1]**2))
             
         
 
@@ -136,10 +134,28 @@ arr=np.array(avg)
 y1 = np.average(arr, axis=0)
 
 y2=obe.analytical_solution(time,0.01,0.1)
+
+residuals=y2-y1
+
 plt.figure()
-plt.plot(times,y, label = "single MCW")
-plt.plot(times,y1, label = "Averaged MCW")
-plt.plot(times,y2, label = "OBE")
+
+import matplotlib.ticker as ticker  # Allows you to modify the tick markers to
+
+xtick_spacing = 200  # assess the errors from the chi-squared
+ytick_spacing = 0.2  # contour plots.
+
+ax = plt.gca()
+ax.xaxis.set_major_locator(ticker.MultipleLocator(xtick_spacing))
+ax.yaxis.set_major_locator(ticker.MultipleLocator(ytick_spacing))
+
+
+#plt.plot(times,y, label = "single MCW")
+plt.plot(times,y1, label = "Averaged MCW", color="gold")
+plt.plot(times,y2, label = "OBE", linestyle="dashed", color="deepskyblue")
+plt.plot(times,residuals, label = "Residuals", linestyle="dotted", color="hotpink")
 plt.legend()
+plt.xlabel('Time (1/100 Rabi period)')  # Axis labels
+plt.ylabel('Excited state population')
+
 
 plt.show()
